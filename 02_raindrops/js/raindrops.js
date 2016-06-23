@@ -1,39 +1,46 @@
-var canvas = document.getElementById("canvas");
-var ctx = canvas.getContext("2d");
-var canvasWidth = canvas.width;
-var canvasHeight = canvas.height;
+'use es6';
+
+const Raindrop = require("./Raindrop.js");
+
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+const canvasWidth = canvas.width;
+const canvasHeight = canvas.height;
+const maxRaindropDensity = 5;
+
+let lastUpdate = Date.now();
+let raindrops = [];
 
 function init() {
-  setInterval(update, 2500);
+  // ctx.globalCompositeOperation=
+  setInterval(tick, 0);
 }
 
-function update() {
-  const raindrops = [];
-  if (Math.random() > .9 && raindrops.length < 5) {
-    
+function tick() {
+  var now = Date.now();
+  var dt = now - lastUpdate;
+  lastUpdate = now;
+
+  fixedUpdate(dt);
+  animationUpdate(dt);
+}
+
+function fixedUpdate() {
+  console.log("fixedUpdate!");
+}
+
+function animationUpdate(dt) {
+  if (raindrops.length <= maxRaindropDensity && Math.random() > .9) {
+    const raindropVector = getRandomVectorInCanvas(canvas);
+    raindrops.push(new Raindrop(raindropVector.x, raindropVector.y));
   }
-  const vector = getRandomVectorInCanvas(canvas);
-  const color = getRandomColor();
-  const imageData = ctx.createImageData(1,1);
-  setPixelWithColor(imageData, 0, color);
-  ctx.putImageData(imageData, vector.x, vector.y);
-
-}
-
-function getRandomColor() {
-  return {
-    r: Math.random() * 255,
-    g: Math.random() * 255,
-    b: Math.random() * 255,
-    a: 255
-  }
-}
-
-function setPixelWithColor(imageData, index, colorData) {
-   imageData.data[index+0] = colorData.r;
-   imageData.data[index+1] = colorData.g;
-   imageData.data[index+2] = colorData.b;
-   imageData.data[index+3] = colorData.a;
+  ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+  raindrops.forEach((raindrop) => {
+    raindrop.drawCircle(dt, ctx);
+  });
+  raindrops = raindrops.filter((raindrop) => {
+		return raindrop.age < raindrop.lifespan;
+	});
 }
 
 function getRandomVectorInCanvas(canvas) {
@@ -42,5 +49,6 @@ function getRandomVectorInCanvas(canvas) {
     y: Math.random() * canvas.height
   }
 }
+
 
 window.onload = init;

@@ -42,41 +42,51 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	var canvas = document.getElementById("canvas");
-	var ctx = canvas.getContext("2d");
-	var canvasWidth = canvas.width;
-	var canvasHeight = canvas.height;
+	'use es6';
+
+	const Raindrop = __webpack_require__(1);
+
+	const canvas = document.getElementById("canvas");
+	const ctx = canvas.getContext("2d");
+	const canvasWidth = canvas.width;
+	const canvasHeight = canvas.height;
+	const maxRaindropDensity = 5;
+
+	let lastUpdate = Date.now();
+	let raindrops = [];
 
 	function init() {
-	  setInterval(update, 2500);
+	  // ctx.globalCompositeOperation=
+	  setInterval(tick, 0);
 	}
 
-	function update() {
-	  const raindrops = [];
-	  if (Math.random() > .9 && raindrops.length < 5) {}
-	  const vector = getRandomVectorInCanvas(canvas);
-	  const color = getRandomColor();
-	  const imageData = ctx.createImageData(1, 1);
-	  setPixelWithColor(imageData, 0, color);
-	  ctx.putImageData(imageData, vector.x, vector.y);
+	function tick() {
+	  var now = Date.now();
+	  var dt = now - lastUpdate;
+	  lastUpdate = now;
+
+	  fixedUpdate(dt);
+	  animationUpdate(dt);
 	}
 
-	function getRandomColor() {
-	  return {
-	    r: Math.random() * 255,
-	    g: Math.random() * 255,
-	    b: Math.random() * 255,
-	    a: 255
-	  };
+	function fixedUpdate() {
+	  console.log("fixedUpdate!");
 	}
 
-	function setPixelWithColor(imageData, index, colorData) {
-	  imageData.data[index + 0] = colorData.r;
-	  imageData.data[index + 1] = colorData.g;
-	  imageData.data[index + 2] = colorData.b;
-	  imageData.data[index + 3] = colorData.a;
+	function animationUpdate(dt) {
+	  if (raindrops.length <= maxRaindropDensity && Math.random() > .9) {
+	    const raindropVector = getRandomVectorInCanvas(canvas);
+	    raindrops.push(new Raindrop(raindropVector.x, raindropVector.y));
+	  }
+	  ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+	  raindrops.forEach(raindrop => {
+	    raindrop.drawCircle(dt, ctx);
+	  });
+	  raindrops = raindrops.filter(raindrop => {
+	    return raindrop.age < raindrop.lifespan;
+	  });
 	}
 
 	function getRandomVectorInCanvas(canvas) {
@@ -87,6 +97,34 @@
 	}
 
 	window.onload = init;
+
+/***/ },
+/* 1 */
+/***/ function(module, exports) {
+
+	'use es6';
+
+	module.exports = class Raindrop {
+	  constructor(xPos, yPos) {
+	    this.age = 0;
+	    this.lifespan = 1 + (Math.random() - .5);
+	    this.radius = 150;
+	    this.x = xPos;
+	    this.y = yPos;
+	  }
+
+	  drawCircle(dt, ctx) {
+	    ctx.beginPath();
+	    const radius = this.radius * this.age / this.lifespan;
+	    ctx.arc(this.x, this.y, radius, 0, Math.PI * 2, false);
+	    ctx.closePath();
+	    ctx.lineWidth = 2;
+	    ctx.strokeStyle = `rgba(20,20,250,${ 1 - this.age / this.lifespan })`;
+	    ctx.stroke();
+	    this.age += dt / 1000;
+	    console.log("age: " + this.age);
+	  }
+	};
 
 /***/ }
 /******/ ]);
