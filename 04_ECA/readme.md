@@ -8,4 +8,4 @@ Clone and open index.html to run. Run webpack in `04_ECA/` to compile.
 
 -Each button at the top determines whether the child of that parent configuration (eg 101, 001)
 will be filled in or not. Click a button to change the rule.  
-![Various outcomes produced by different rules of an elementary cellular automata.](http://imgur.com/a/oPefB)
+![Various outcomes produced by different rules of an elementary cellular automata.](http://i.imgur.com/vylVUgu.gif)
