@@ -1,1 +1,3 @@
-Very simple procedural generation tool. Randomly create a pattern of colored dots across a black background.
+Make some pretty flowers.
+
+Clone and open index.html to run. Run webpack in `03_flowers/` to compile.
