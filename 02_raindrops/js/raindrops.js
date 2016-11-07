@@ -12,7 +12,6 @@ let lastUpdate = Date.now();
 let raindrops = [];
 
 function init() {
-  // ctx.globalCompositeOperation=
   setInterval(tick, 0);
 }
 
@@ -21,12 +20,7 @@ function tick() {
   var dt = now - lastUpdate;
   lastUpdate = now;
 
-  fixedUpdate(dt);
   animationUpdate(dt);
-}
-
-function fixedUpdate() {
-  console.log("fixedUpdate!");
 }
 
 function animationUpdate(dt) {

@@ -44,18 +44,19 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
 	'use es6';
 
-	const Raindrop = __webpack_require__(1);
+	var Raindrop = __webpack_require__(1);
 
-	const canvas = document.getElementById("canvas");
-	const ctx = canvas.getContext("2d");
-	const canvasWidth = canvas.width;
-	const canvasHeight = canvas.height;
-	const maxRaindropDensity = 5;
+	var canvas = document.getElementById("canvas");
+	var ctx = canvas.getContext("2d");
+	var canvasWidth = canvas.width;
+	var canvasHeight = canvas.height;
+	var maxRaindropDensity = 5;
 
-	let lastUpdate = Date.now();
-	let raindrops = [];
+	var lastUpdate = Date.now();
+	var raindrops = [];
 
 	function init() {
 	  // ctx.globalCompositeOperation=
@@ -77,14 +78,14 @@
 
 	function animationUpdate(dt) {
 	  if (raindrops.length <= maxRaindropDensity && Math.random() > .9) {
-	    const raindropVector = getRandomVectorInCanvas(canvas);
+	    var raindropVector = getRandomVectorInCanvas(canvas);
 	    raindrops.push(new Raindrop(raindropVector.x, raindropVector.y));
 	  }
 	  ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-	  raindrops.forEach(raindrop => {
+	  raindrops.forEach(function (raindrop) {
 	    raindrop.drawCircle(dt, ctx);
 	  });
-	  raindrops = raindrops.filter(raindrop => {
+	  raindrops = raindrops.filter(function (raindrop) {
 	    return raindrop.age < raindrop.lifespan;
 	  });
 	}
@@ -102,10 +103,17 @@
 /* 1 */
 /***/ function(module, exports) {
 
+	"use strict";
 	'use es6';
 
-	module.exports = class Raindrop {
-	  constructor(xPos, yPos) {
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	module.exports = function () {
+	  function Raindrop(xPos, yPos) {
+	    _classCallCheck(this, Raindrop);
+
 	    this.age = 0;
 	    this.lifespan = 1 + (Math.random() - .5);
 	    this.radius = 150;
@@ -113,18 +121,23 @@
 	    this.y = yPos;
 	  }
 
-	  drawCircle(dt, ctx) {
-	    ctx.beginPath();
-	    const radius = this.radius * this.age / this.lifespan;
-	    ctx.arc(this.x, this.y, radius, 0, Math.PI * 2, false);
-	    ctx.closePath();
-	    ctx.lineWidth = 2;
-	    ctx.strokeStyle = `rgba(20,20,250,${ 1 - this.age / this.lifespan })`;
-	    ctx.stroke();
-	    this.age += dt / 1000;
-	    console.log("age: " + this.age);
-	  }
-	};
+	  _createClass(Raindrop, [{
+	    key: "drawCircle",
+	    value: function drawCircle(dt, ctx) {
+	      ctx.beginPath();
+	      var radius = this.radius * this.age / this.lifespan;
+	      ctx.arc(this.x, this.y, radius, 0, Math.PI * 2, false);
+	      ctx.closePath();
+	      ctx.lineWidth = 2;
+	      ctx.strokeStyle = "rgba(20,20,250," + (1 - this.age / this.lifespan) + ")";
+	      ctx.stroke();
+	      this.age += dt / 1000;
+	      console.log("age: " + this.age);
+	    }
+	  }]);
+
+	  return Raindrop;
+	}();
 
 /***/ }
 /******/ ]);

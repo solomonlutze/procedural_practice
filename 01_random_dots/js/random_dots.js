@@ -13,7 +13,6 @@ function update() {
   const imageData = ctx.createImageData(1,1);
   setPixelWithColor(imageData, 0, color);
   ctx.putImageData(imageData, vector.x, vector.y);
-
 }
 
 function getRandomColor() {

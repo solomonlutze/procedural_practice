@@ -1,0 +1,30 @@
+.main {
+  width: 100%;
+  text-align: center;
+}
+
+.main .rules {
+}
+
+.main .rules .rule {
+  display: inline-block;
+}
+
+.main .rules .rule .rule-button {
+  padding: 10px;
+  margin: 10px;
+}
+
+.main .rows .row {
+  height: 10px;
+}
+
+.main .rows .row .cell {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+}
+
+.main .rows .row .cell.filled {
+  background-color: black;
+}
