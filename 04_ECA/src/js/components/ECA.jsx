@@ -18,15 +18,6 @@ class ECA extends React.Component {
       this.setState({rule: newRule})
     }
   }
-  //
-  // componentDidMount() {
-  // }
-  //
-  // componentWillUnmount() {
-  // }
-  //
-  // _onChange() {
-  // }
 
   getRuleButtons() {
     const {rule} = this.state;
@@ -83,11 +74,10 @@ class ECA extends React.Component {
   }
 
   render() {
-    const ruleEles = this.getRuleButtons();
     return (
       <div className='main'>
         <div className='rules'>
-          {ruleEles}
+          {this.getRuleButtons()}
         </div>
         <div className='rows'>
           {this.getRows()}
